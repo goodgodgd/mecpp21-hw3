@@ -1,12 +1,17 @@
 #include "pcpmain.h"
 
 #include <random>
+#include <chrono>
 
-PCPMain::PCPMain(const std::string &color_name, const std::string &depth_name)
-    : color_name(color_name), depth_name(depth_name)
+namespace ch = std::chrono;
+
+PCPMain::PCPMain(const std::string &prj_path, const std::string &color_name, const std::string &depth_name)
+    : prj_path(prj_path),
+      color_name(color_name),
+      depth_name(depth_name)
 {
     // TODO : add filter objects
-    filters.push_back(std::make_unique<FirstFilter>());
+    filters.push_back(std::make_unique<FirstFilter>("First"));
 }
 
 void PCPMain::main()
@@ -27,10 +32,13 @@ void PCPMain::main()
 
 cv::Mat PCPMain::load_image(const std::string &name, int imtype)
 {
-    std::string path = "../samples/" + name;
+    std::string path = prj_path + "/samples/" + name;
     cv::Mat image = cv::imread(path, imtype);
-    cout << "[load_image] shape=" << image.rows << " x " << image.cols
-         << " x " << image.channels() << ", depth=" << image.depth() << "\n";
+    if (image.empty())
+        cout << "[load_image] No image exists: " << path << "\n";
+    else
+        cout << "[load_image] shape=" << image.rows << " x " << image.cols
+             << " x " << image.channels() << ", depth=" << image.depth() << "\n";
     return image;
 }
 
@@ -71,7 +79,14 @@ void PCPMain::show_point_cloud(cv::Mat cloud, cv::Mat color)
 
 cv::Mat PCPMain::smooth_filter(const std::unique_ptr<FilterBase> &filter, cv::Mat cloud)
 {
+    ch::time_point<ch::high_resolution_clock> start = ch::high_resolution_clock::now();
+
     cv::Mat smooth_cloud = filter->apply(cloud);
+
+    ch::time_point<ch::high_resolution_clock> end = ch::high_resolution_clock::now();
+    auto diff = end - start;
+    cout << "[smooth_filter] \"" << filter->name << "\" filter 처리 시간: "
+         << std::setw(7) << ch::duration_cast<ch::microseconds>(diff).count() << " us" << endl;
     return smooth_cloud;
 }
 

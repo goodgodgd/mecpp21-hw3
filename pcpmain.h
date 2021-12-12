@@ -16,6 +16,7 @@ using std::endl;
 class PCPMain
 {
 private:
+    const std::string prj_path;
     const std::string color_name;
     const std::string depth_name;
     const CameraIntrinsic camera_param = Config::CAMERA_PARAM;
@@ -30,7 +31,7 @@ private:
     void evaluate_filter(cv::Mat cloud, cv::Mat smooth_cloud);
 
 public:
-    PCPMain(const std::string &color_name, const std::string &depth_name);
+    PCPMain(const std::string &prj_path, const std::string &color_name, const std::string &depth_name);
     ~PCPMain() {}
     void main();
 };
