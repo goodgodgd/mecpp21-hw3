@@ -27,7 +27,7 @@ void PCPMain::main()
 
 cv::Mat PCPMain::load_image(const std::string &name, int imtype)
 {
-    std::string path = src_path + "/" + name;
+    std::string path = "../samples/" + name;
     cv::Mat image = cv::imread(path, imtype);
     cout << "[load_image] shape=" << image.rows << " x " << image.cols
          << " x " << image.channels() << ", depth=" << image.depth() << "\n";
@@ -64,6 +64,7 @@ void PCPMain::show_point_cloud(cv::Mat cloud, cv::Mat color)
 
     cv::viz::Viz3d viewer = cv::viz::Viz3d("Point Cloud");
     viewer.showWidget("cloud", *wcloud);
+    viewer.setWindowSize(cv::Size(700, 500));
     viewer.spin();
     delete wcloud;
 }
@@ -78,14 +79,14 @@ cv::Mat PCPMain::add_noise_cloud(cv::Mat cloud)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(-0.02, 0.02);
+    std::uniform_real_distribution<float> dis(-max_noise, max_noise);
     cv::Mat noisy_cloud = cloud.clone();
     for (int y = 0; y < noisy_cloud.rows; ++y)
     {
         for (int x = 0; x < noisy_cloud.cols; ++x)
         {
-            cv::Vec3f noise(dis(gen), dis(gen), dis(gen));
-            noisy_cloud.at<cv::Vec3f>(y, x) += noise;
+            float noise = dis(gen);
+            noisy_cloud.at<cv::Vec3f>(y, x) *= (1 + noise);
         }
     }
     return noisy_cloud;
@@ -93,21 +94,17 @@ cv::Mat PCPMain::add_noise_cloud(cv::Mat cloud)
 
 void PCPMain::evaluate_filter(cv::Mat cloud, cv::Mat smooth_cloud)
 {
-    cv::Vec3f diff;
+    float diff;
     float max_diff = 0;
     float sum_diff = 0;
     for (int y = 0; y < cloud.rows; ++y)
     {
         for (int x = 0; x < cloud.cols; ++x)
         {
-            diff = smooth_cloud.at<cv::Vec3f>(y, x) - cloud.at<cv::Vec3f>(y, x);
-            for (int i = 0; i < 3; ++i)
-            {
-                float adi = fabs(diff(i));
-                if (max_diff < adi)
-                    max_diff = adi;
-                sum_diff += adi;
-            }
+            diff = fabs(smooth_cloud.at<cv::Vec3f>(y, x)(2) - cloud.at<cv::Vec3f>(y, x)(2));
+            if (max_diff < diff)
+                max_diff = diff;
+            sum_diff += diff;
         }
     }
     float mean_diff = sum_diff / float(cloud.rows * cloud.cols);

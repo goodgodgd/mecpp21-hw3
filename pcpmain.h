@@ -16,7 +16,6 @@ using std::endl;
 class PCPMain
 {
 private:
-    const std::string src_path = Config::SRC_IMG_PATH;
     const std::string color_name;
     const std::string depth_name;
     const CameraIntrinsic camera_param = Config::CAMERA_PARAM;

@@ -12,7 +12,6 @@ struct CameraIntrinsic
 class Config
 {
 public:
-    static const std::string SRC_IMG_PATH;
     static const CameraIntrinsic CAMERA_PARAM;
     static const float MAX_NOISE;
 };
