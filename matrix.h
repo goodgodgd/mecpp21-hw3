@@ -26,8 +26,8 @@ public:
         if (data_.size() != size())
             throw MyException(boost::str(boost::format("len of data: %1% != # matrix elem: %2%") %
                                          data_.size() % size()));
-        data = new int[size()];
-        memcpy(data, data_.begin(), sizeof(int) * size());
+        data = new T[size()];
+        memcpy(data, data_.begin(), sizeof(T) * size());
     }
 
     Matrix(T default_value, uint16_t rows_, uint16_t cols_)
@@ -37,21 +37,6 @@ public:
         for (int r = 0; r < rows; ++r)
             for (int c = 0; c < cols; ++c)
                 this->at(r, c) = default_value;
-    }
-
-    Matrix(Matrix<T> &other)
-        : data(nullptr), rows(other.num_rows()), cols(other.num_cols())
-    {
-        data = new T[other.size()];
-        memcpy(data, other.raw_ptr(), sizeof(int) * size());
-    }
-
-    static std::unique_ptr<Matrix> random_matrix_factory(uint16_t rows, uint16_t cols)
-    {
-        // HW2: Implement this fuction
-        // fill a matrix with uniformly distributed random numbers between -1~1
-        std::unique_ptr<Matrix<float>> ptr;
-        return ptr;
     }
 
     uint16_t size() { return rows * cols; }
