@@ -62,10 +62,20 @@ public:
     std::string name;
 };
 
+
 class FirstFilter : public FilterBase
 {
 public:
     FirstFilter(const std::string &name) : FilterBase(name) {}
+    virtual cv::Mat apply(const cv::Mat cloud);
+    virtual std::vector<std::vector<Matrix<float>>> impl_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t cloud_y, uint32_t cloud_x, Matrix<float> mask);
+};
+
+
+class SecondFilter : public FilterBase
+{
+public:
+   SecondFilter(const std::string &name) : FilterBase(name) {}
     virtual cv::Mat apply(const cv::Mat cloud);
     virtual std::vector<std::vector<Matrix<float>>> impl_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t cloud_y, uint32_t cloud_x, Matrix<float> mask);
 };
