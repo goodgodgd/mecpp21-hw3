@@ -5,6 +5,11 @@
 #include <cstring> // memcpy
 #include <exception>
 #include <boost/format.hpp>
+#include <cstdlib>
+#include <ctime>
+
+using boost::str;
+using boost::format;
 
 class MyException : public std::exception
 {
@@ -46,21 +51,45 @@ public:
         memcpy(data, other.raw_ptr(), sizeof(int) * size());
     }
 
-    static std::unique_ptr<Matrix> random_matrix_factory(uint16_t rows, uint16_t cols)
+    static std::unique_ptr<Matrix<T>> random_matrix_factory(uint16_t rows, uint16_t cols)
     {
         // HW2: Implement this fuction
         // fill a matrix with uniformly distributed random numbers between -1~1
-        std::unique_ptr<Matrix<float>> ptr;
-        return ptr;
+        srand(time(NULL));
+        float randTemp = 0;
+        int a = -1;
+        int b = 1;
+        std::unique_ptr<Matrix<T>> ptr = std::make_unique<Matrix<T>>(0, rows, cols);
+        for (int r = 0; r < rows; ++r)
+            for (int c = 0; c < cols; ++c)
+                {
+                    randTemp = rand() % (b+1-a) + a;
+                    ptr->at(r, c) = randTemp;
+                    //result->at(r, c) = this->at(r, c) + other.at(r, c);
+                }
+        return std::move(ptr);
     }
 
-    uint16_t size() { return rows * cols; }
+    std::unique_ptr<Matrix<T>> row_ptr(uint16_t r)
+    {
+        // HW2: Implement this fuction
+        int col = this->num_cols();
+        std::unique_ptr<Matrix<T>> slcie_data = std::make_unique<Matrix<T>>(0, 1, col);
+        for (int c = 0; c < col; ++c)
+            {
+                slcie_data->at(0, c) = this->at(r, c);
+            }
+        return std::move(slcie_data);
+    }
 
-    uint16_t num_rows() { return rows; }
 
-    uint16_t num_cols() { return cols; }
+    const uint16_t size() noexcept { return rows * cols; }
 
-    const T *raw_ptr() { return data; }
+    const uint16_t num_rows() noexcept { return rows; }
+
+    const uint16_t num_cols() noexcept{ return cols; }
+
+    const T *raw_ptr() noexcept { return data; }
 
     // change operator() to at()
     T &at(uint16_t row, uint16_t col)
@@ -89,12 +118,40 @@ public:
         return std::move(result);
     }
 
-    Matrix operator*(T scalar)
+    std::unique_ptr<Matrix<T>> operator-(T scalar)
+    {
+        std::unique_ptr<Matrix<T>> result = std::make_unique<Matrix<T>>(0, this->rows, this->cols);
+        for (int r = 0; r < rows; ++r)
+            for (int c = 0; c < cols; ++c)
+                result->at(r, c) = this->at(r, c) - scalar;
+        return std::move(result);
+    }
+
+    std::unique_ptr<Matrix<T>> operator*(Matrix<T> other)
     {
         // HW2: Implement this fuction
-        Matrix<T> result(0, this->rows, this->cols);
-        return result;
+        if (this->num_cols() != other.num_rows())
+            throw MyException(str(format("different rows and cols: %1% != %2%") %this->num_cols() % other.num_rows()));
+
+        std::unique_ptr<Matrix<T>> result = std::make_unique<Matrix<T>>(0, this->rows, other.num_cols());
+        for (int r = 0; r < this->num_rows(); ++r)
+            for (int c = 0; c < other.num_cols(); ++c)
+                for (int k = 0; k < this->num_cols(); ++k)
+                    result->at(r, c) += this -> at(r, k) * other.at(k, c);
+        return std::move(result);
     }
+
+    std::unique_ptr<Matrix<T>> operator^(T scalar)
+    {
+        // HW2: Implement this fuction
+        std::unique_ptr<Matrix<T>> result = std::make_unique<Matrix<T>>(0, this->rows,  this->cols);
+        for (int r = 0; r < rows; ++r)
+            for (int c = 0; c < cols; ++c)
+                result->at(r, c) = this->at(r, c) * scalar;
+        return std::move(result);
+    }
+
+
 
 private:
     T *data;

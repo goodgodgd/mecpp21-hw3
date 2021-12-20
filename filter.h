@@ -21,4 +21,18 @@ public:
     virtual cv::Mat apply(const cv::Mat cloud);
 };
 
+class SecondFilter : public FilterBase
+{
+public:
+    SecondFilter(const std::string &name) : FilterBase(name) {}
+    virtual cv::Mat apply(const cv::Mat cloud);
+};
+
+class ThirdFilter : public FilterBase
+{
+public:
+    ThirdFilter(const std::string &name) : FilterBase(name) {}
+    virtual cv::Mat apply(const cv::Mat cloud);
+};
+
 #endif // FILTER_H

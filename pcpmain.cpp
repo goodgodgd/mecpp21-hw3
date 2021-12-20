@@ -12,6 +12,8 @@ PCPMain::PCPMain(const std::string &prj_path, const std::string &color_name, con
 {
     // TODO : add filter objects
     filters.push_back(std::make_unique<FirstFilter>("First"));
+    filters.push_back(std::make_unique<SecondFilter>("Second"));
+    filters.push_back(std::make_unique<ThirdFilter>("Third"));
 }
 
 void PCPMain::main()
@@ -19,10 +21,10 @@ void PCPMain::main()
     cv::Mat color = load_image(color_name, cv::IMREAD_COLOR);
     cv::Mat depth = load_image(depth_name, cv::IMREAD_ANYDEPTH);
     cv::Mat cloud = convert_to_point_cloud(depth);
-    show_point_cloud(cloud, color);
+    //show_point_cloud(cloud, color); 
 
     cv::Mat noisy_cloud = add_noise_cloud(cloud);
-    show_point_cloud(noisy_cloud, color);
+    //show_point_cloud(noisy_cloud, color);
     for (auto &filter : filters)
     {
         cv::Mat smooth_cloud = smooth_filter(filter, noisy_cloud);
