@@ -1,0 +1,17 @@
+juyeon@juyeon-desktop:~/0002/build$ /home/juyeon/0002/build/HW3 
+Start programs
+path:/home/juyeon/0002
+[load_image] shape=480 x 640 x 3, depth=0
+[load_image] shape=480 x 640 x 1, depth=2
+>> apply first filter
+[smooth_filter] "First" filter 처리 시간: 21928892 us
+[evaluate] mean diff=5.2787e+28, max diff=1.61687e+29
+>> apply second filter
+[smooth_filter] "Second" filter 처리 시간:  907989 us
+[evaluate] mean diff=4.86873, max diff=43.825
+>> apply third filter
+[smooth_filter] "Third" filter 처리 시간:  915657 us
+[evaluate] mean diff=4.86873, max diff=43.825
+
+
+
