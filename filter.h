@@ -80,4 +80,13 @@ public:
     virtual std::vector<std::vector<Matrix<float>>> impl_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t cloud_y, uint32_t cloud_x, Matrix<float> mask);
 };
 
+
+class ThirdFilter : public FilterBase
+{
+public:
+   ThirdFilter(const std::string &name) : FilterBase(name) {}
+    virtual cv::Mat apply(const cv::Mat cloud);
+    virtual std::vector<std::vector<Matrix<float>>> impl_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t cloud_y, uint32_t cloud_x, Matrix<float> mask);
+};
+
 #endif // FILTER_H
