@@ -91,8 +91,10 @@ public:
 
     Matrix operator*(T scalar)
     {
-        // HW2: Implement this fuction
         Matrix<T> result(0, this->rows, this->cols);
+        for (int r = 0; r < rows; ++r)
+            for (int c = 0; c < cols; ++c)
+                result(r, c) = (*this)(r, c) * scalar;
         return result;
     }
 
