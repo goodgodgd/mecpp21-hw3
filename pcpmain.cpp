@@ -11,7 +11,7 @@ PCPMain::PCPMain(const std::string &prj_path, const std::string &color_name, con
       depth_name(depth_name)
 {
     // TODO : add filter objects
-    filters.push_back(std::make_unique<FirstFilter>("First"));
+    filters.push_back(std::make_unique<MedianFilter>("median"));
 }
 
 void PCPMain::main()
@@ -26,6 +26,7 @@ void PCPMain::main()
     for (auto &filter : filters)
     {
         cv::Mat smooth_cloud = smooth_filter(filter, noisy_cloud);
+        show_point_cloud(smooth_cloud, color);
         evaluate_filter(cloud, smooth_cloud);
     }
 }
