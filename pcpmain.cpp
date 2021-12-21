@@ -11,7 +11,7 @@ PCPMain::PCPMain(const std::string &prj_path, const std::string &color_name, con
       depth_name(depth_name)
 {
     // TODO : add filter objects
-    // filters.push_back(std::make_unique<FirstFilter>("First"));
+    filters.push_back(std::make_unique<FirstFilter>("First"));
     filters.push_back(std::make_unique<SecondFilter>("Second"));
 }
 

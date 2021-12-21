@@ -45,7 +45,7 @@ std::vector<std::vector<Matrix<float>>> FirstFilter::apply_filter(std::vector<st
     {
         for(int x=0; x<cols; ++x)
         {
-            if (points[x][y].at(0,2) != 0)
+            if (points[x][y].at(0,2) == 0)
             {
                 continue;
             }
@@ -68,13 +68,14 @@ std::vector<std::vector<Matrix<float>>> SecondFilter::apply_filter(std::vector<s
     {
         for(int x=0; x<cols; ++x)
         {
-            if (points[x][y].at(0,2) != 0)
+            if (points[x][y].at(0,2) == 0)
             {
                 continue;
             }
             else
-            {                  
+            {             
                 float point_x, point_y, point_z= FilterBase::Filter_cal(points, kernel, y, x);
+                
                 // apply filter and filtered_points
                 points[x][y].at(0,0) = point_x;
                 points[x][y].at(0,1) = point_y;

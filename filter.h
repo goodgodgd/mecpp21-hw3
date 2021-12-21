@@ -42,13 +42,13 @@ public:
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1}, ksize, ksize);
         
-        for (int y=0; y<ksize; ++y)
-        {
-            for(int x=0; x<ksize; ++x)
-            {
-                avg_filter_kernel.at(y,x) /= (ksize*ksize);
-            }
-        }
+        // for (int y=0; y<ksize; ++y)
+        // {
+        //     for(int x=0; x<ksize; ++x)
+        //     {
+        //         avg_filter_kernel.at(y,x) /= (ksize*ksize);
+        //     }
+        // }
         return avg_filter_kernel;
     }
 
@@ -71,6 +71,7 @@ public:
         float point_y = 0;
         float point_z = 0;
         int half_size = filter_kernel.num_rows() / 2;
+        float point_wsum = 0;
 
         for(int ky=0; ky<filter_kernel.num_rows(); ++y)
         {
@@ -79,8 +80,12 @@ public:
                 point_x += points[x+kx-half_size][y+ky-half_size].at(0,0) * filter_kernel.at(y,x);
                 point_y += points[x+kx-half_size][y+ky-half_size].at(0,1) * filter_kernel.at(y,x);
                 point_z += points[x+kx-half_size][y+ky-half_size].at(0,2) * filter_kernel.at(y,x);
+                point_wsum += filter_kernel.at(y,x);
             }
         }
+        point_x /= point_wsum;
+        point_y /= point_wsum;
+        point_z /= point_wsum;
         return point_x; point_y; point_z;
     }
 
