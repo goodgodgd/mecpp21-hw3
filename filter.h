@@ -52,6 +52,19 @@ public:
         return avg_filter_kernel;
     }
 
+    Matrix<float> Gaussian_filter(int ksize)
+    {
+        // mask size : 5x5, sigma : 5
+        Matrix<float> gaussian_filter_kernel(
+            {0.0000, 0.0000, 0.0002, 0.0000, 0.0000,
+            0.0000, 0.0113, 0.0837, 0.0113, 0.0000,
+            0.0002, 0.0837, 0.6187, 0.0837, 0.0002,
+            0.0000, 0.0113, 0.0837, 0.0113, 0.0000,
+            0.0000, 0.0000, 0.0002, 0.0000, 0.0000,}, ksize, ksize);
+
+        return gaussian_filter_kernel;
+    }
+    
     float Filter_cal(std::vector<std::vector<Matrix<float>>> points, Matrix<float> &filter_kernel, int y, int x)
     {
         float point_x = 0;
@@ -95,6 +108,14 @@ class FirstFilter : public FilterBase
 {
 public:
     FirstFilter(const std::string &name) : FilterBase(name) {}
+    virtual cv::Mat apply(const cv::Mat cloud);
+    std::vector<std::vector<Matrix<float>>> apply_filter(std::vector<std::vector<Matrix<float>>> points, uint16_t y, uint16_t x, Matrix<float> kernel);
+};
+
+class SecondFilter : public FilterBase
+{
+public:
+    SecondFilter(const std::string &name) : FilterBase(name) {}
     virtual cv::Mat apply(const cv::Mat cloud);
     std::vector<std::vector<Matrix<float>>> apply_filter(std::vector<std::vector<Matrix<float>>> points, uint16_t y, uint16_t x, Matrix<float> kernel);
 };
