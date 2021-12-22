@@ -12,6 +12,7 @@ PCPMain::PCPMain(const std::string &prj_path, const std::string &color_name, con
 {
     // TODO : add filter objects
     filters.push_back(std::make_unique<FirstFilter>("First"));
+    filters.push_back(std::make_unique<SecondFilter>("Second"));
 }
 
 void PCPMain::main()
