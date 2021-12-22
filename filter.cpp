@@ -39,7 +39,7 @@ cv::Mat SecondFilter::apply(const cv::Mat cloud_origin)
 }
 
 
-std::vector<std::vector<Matrix<float>>> FirstFilter::apply_filter(std::vector<std::vector<Matrix<float>>> points, uint16_t rows, uint16_t cols, Matrix<float> kernel)
+std::vector<std::vector<Matrix<float>>> FirstFilter::apply_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t rows, uint32_t cols, Matrix<float> kernel)
 {
     for (int y=0; y<rows; ++y)
     {
@@ -62,7 +62,7 @@ std::vector<std::vector<Matrix<float>>> FirstFilter::apply_filter(std::vector<st
     return points;
 }
 
-std::vector<std::vector<Matrix<float>>> SecondFilter::apply_filter(std::vector<std::vector<Matrix<float>>> points, uint16_t rows, uint16_t cols, Matrix<float> kernel)
+std::vector<std::vector<Matrix<float>>> SecondFilter::apply_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t rows, uint32_t cols, Matrix<float> kernel)
 {
     for (int y=0; y<rows; ++y)
     {

@@ -26,6 +26,7 @@ public:
                 float point_z = cloud.at<cv::Vec3f>(y,x)[2];
                 Matrix<float> point_3D({point_x, point_y, point_z}, 1, 3);
                 // .push_back <<- segmentation fault (core dumped)
+                points.push_back(std::vector<Matrix<float>>());
                 points[x].push_back(point_3D);
             }
         }
@@ -114,7 +115,7 @@ class FirstFilter : public FilterBase
 public:
     FirstFilter(const std::string &name) : FilterBase(name) {}
     virtual cv::Mat apply(const cv::Mat cloud);
-    std::vector<std::vector<Matrix<float>>> apply_filter(std::vector<std::vector<Matrix<float>>> points, uint16_t y, uint16_t x, Matrix<float> kernel);
+    std::vector<std::vector<Matrix<float>>> apply_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t y, uint32_t x, Matrix<float> kernel);
 };
 
 class SecondFilter : public FilterBase
@@ -122,7 +123,7 @@ class SecondFilter : public FilterBase
 public:
     SecondFilter(const std::string &name) : FilterBase(name) {}
     virtual cv::Mat apply(const cv::Mat cloud);
-    std::vector<std::vector<Matrix<float>>> apply_filter(std::vector<std::vector<Matrix<float>>> points, uint16_t y, uint16_t x, Matrix<float> kernel);
+    std::vector<std::vector<Matrix<float>>> apply_filter(std::vector<std::vector<Matrix<float>>> points, uint32_t y, uint32_t x, Matrix<float> kernel);
 };
 
 #endif // FILTER_H
