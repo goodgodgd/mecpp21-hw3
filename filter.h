@@ -7,9 +7,10 @@
 
 class FilterBase
 {
+    
 public:
     FilterBase(const std::string &name) : name(name) {}
-    virtual cv::Mat apply(const cv::Mat cloud) { return cloud; }
+    virtual cv::Mat apply(const cv::Mat cloud) {  return cloud; }
 
     std::string name;
 };
@@ -22,3 +23,4 @@ public:
 };
 
 #endif // FILTER_H
+
